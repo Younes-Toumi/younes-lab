@@ -70,7 +70,7 @@ function createBox() {
     boxY = Math.random() * (largeBox.clientHeight - boxHeight);
 
     // Random velocity direction
-    const speed = 2;
+    const speed = 4;
 
     const angle = Math.random() * 2 * Math.PI;
 
@@ -137,8 +137,8 @@ function createParticle() {
         element: element,
         x: x,
         y: y,
-        velocityX: (Math.random() - 0.5) * 10,
-        velocityY: (Math.random() - 0.5) * 10
+        velocityX: (Math.random() - 0.5) * 5,
+        velocityY: (Math.random() - 0.5) * 5
     });
 }
 
