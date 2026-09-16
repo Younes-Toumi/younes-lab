@@ -19,7 +19,7 @@ body {
 }
 
 .small-box {
-    width: 33.33%;
+    width: 30%;
     aspect-ratio: 16 / 9;
 
     border: 2px solid white;
@@ -68,7 +68,7 @@ body {
     margin-top: 25px;
 
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 15px;
 
     color: white;
