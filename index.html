@@ -6,9 +6,7 @@
     <title>Computational Playground</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
-<body>
-
+<div class="header">
     <div class="label">
         <label>
             Particle Simulation (Work in Progress)
@@ -27,20 +25,25 @@
 
     <div class="controls">
         <label>
-            Particles: <span id="particleCountValue">10</span>
-            <input type="range" id="particleCountSlider" min="1" max="60" value="10">
+            <span class="control-label">Particles:</span>
+            <span class="value-box" id="particleCountValue">10</span>
+            <input type="range" id="particleCountSlider" min="1" max="50" value="10">
         </label>
         <label>
-            Size: <span id="particleSizeValue">10</span>
-            <input type="range" id="particleSizeSlider" min="10" max="80" value="20">
+            <span class="control-label">Particles:</span>
+            <span class="value-box" id="particleSizeValue">20</span>
+            <input type="range" id="particleSizeSlider" min="10" max="50" value="20">
         </label>
         <label>
-            Temperature: <span id="temperatureValue">20</span>
+            <span class="control-label">Temperature:</span>
+            <span class="value-box" id="temperatureValue">20</span>
             <input type="range" id="temperatureSlider" min="0" max="100" value="50">
         </label>
     </div>
 
     <script src="simulation.js"></script>
+</div>
 
+<body>
 </body>
 </html>
