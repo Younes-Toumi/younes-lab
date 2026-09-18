@@ -37,8 +37,24 @@ const temperatureSlider = document.getElementById("temperatureSlider");
 const temperatureValue = document.getElementById("temperatureValue");
 temperatureValue.textContent = temperatureSlider.value; // sync on load
 
+// Reset Sliders whenever the page loads
+temperatureSlider.value = 20;
+temperatureValue.textContent = 20;
+
+particleCountSlider.value = 10;
+particleCountValue.textContent = 10;
+
+particleSizeSlider.value = 20;
+particleSizeValue.textContent = 20;
+
+
 temperatureSlider.addEventListener("input", function () {
+
     temperatureValue.textContent = temperatureSlider.value;
+
+    changeTemperature();
+
+    updateTemperatureBackground();
 });
 
 const largeBox = document.getElementById("largeBox");
@@ -48,6 +64,134 @@ const particlesContainer = document.getElementById("particles");
 
 const thickness = 1;
 
+
+// ============================================================
+// TEMPERATURE -> VELOCITY SCALE
+// ============================================================
+// ============================================================
+// TEMPERATURE
+// ============================================================
+
+function measureAverageKineticEnergy() {
+    if (particles.length === 0) return 0;
+
+    let totalKE = 0;
+    for (const particle of particles) {
+        totalKE += particle.velocityX ** 2 + particle.velocityY ** 2;
+    }
+    return totalKE / particles.length;
+}
+
+const referenceTemperature = Number(temperatureSlider.value); // captured once, at load
+let referenceAverageKE = null; // filled in right after the initial particles exist
+
+function updateTemperatureBackground() {
+
+    const temperature = Number(temperatureSlider.value);
+
+    // Normalize temperature from [-273, 273] to [-1, 1]
+    const normalizedTemperature = temperature / 100;
+
+    let red = 0;
+    let blue = 0;
+
+    if (normalizedTemperature > 0) {
+        // Positive temperature -> red
+        red = Math.round(80 * normalizedTemperature);
+    } else {
+        // Negative temperature -> blue
+        blue = Math.round(80 * -normalizedTemperature);
+    }
+
+    largeBox.style.backgroundColor =
+        `rgba(${red}, 0, ${blue}, 0.4)`;
+}
+
+// ============================================================
+// CHANGE SYSTEM TEMPERATURE
+// ============================================================
+
+let previousTemperature =
+    Number(temperatureSlider.value);
+
+
+const minimumTemperature = Number(temperatureSlider.min);
+const maximumTemperature = Number(temperatureSlider.max);
+
+let previousAbsoluteTemperature =
+    Number(temperatureSlider.value) - minimumTemperature;
+
+
+function changeTemperature() {
+
+    const sliderTemperature =
+        Number(temperatureSlider.value);
+
+    // Convert slider temperature to an absolute temperature.
+    // The minimum slider value represents 0 K.
+    const newAbsoluteTemperature =
+        sliderTemperature - minimumTemperature;
+
+    // Absolute zero -> all particle velocities become zero
+    if (newAbsoluteTemperature === 0) {
+
+        for (const particle of particles) {
+            particle.velocityX = 0;
+            particle.velocityY = 0;
+        }
+
+        previousAbsoluteTemperature = 0;
+        return;
+    }
+
+    // If particles were previously frozen,
+    // we need to give them a velocity again.
+    if (previousAbsoluteTemperature === 0) {
+
+        const targetScale =
+            Math.sqrt(
+                newAbsoluteTemperature /
+                (maximumTemperature - minimumTemperature)
+            );
+
+        for (const particle of particles) {
+
+            const angle =
+                Math.random() * 2 * Math.PI;
+
+            const speed =
+                5 * targetScale;
+
+            particle.velocityX =
+                Math.cos(angle) * speed;
+
+            particle.velocityY =
+                Math.sin(angle) * speed;
+        }
+
+        previousAbsoluteTemperature =
+            newAbsoluteTemperature;
+
+        return;
+    }
+
+    // T ∝ v²
+    // Therefore v_new / v_old = sqrt(T_new / T_old)
+    const velocityScale =
+        Math.sqrt(
+            newAbsoluteTemperature /
+            previousAbsoluteTemperature
+        );
+
+    for (const particle of particles) {
+
+        particle.velocityX *= velocityScale;
+        particle.velocityY *= velocityScale;
+    }
+
+    previousAbsoluteTemperature =
+        newAbsoluteTemperature;
+}
 
 // ============================
 // Moving nameplate
@@ -146,6 +290,8 @@ for (let i = 0; i < numberOfParticles; i++) {
     createParticle();
 }
 
+referenceAverageKE = measureAverageKineticEnergy();
+
 // ============================
 // particle-particle collision
 // ============================
@@ -235,6 +381,8 @@ function handleParticleToParticleCollisions() {
 // particle-box collision
 // ============================
 function handleParticleToBoxCollisions() {
+
+    updateTemperatureBackground();
 
     const boxLeft = boxX;
     const boxTop = boxY;
