@@ -38,8 +38,8 @@ const temperatureValue = document.getElementById("temperatureValue");
 temperatureValue.textContent = temperatureSlider.value; // sync on load
 
 // Reset Sliders whenever the page loads
-temperatureSlider.value = 20;
-temperatureValue.textContent = 20;
+temperatureSlider.value = 0;
+temperatureValue.textContent = 0;
 
 particleCountSlider.value = 10;
 particleCountValue.textContent = 10;
@@ -214,7 +214,7 @@ function createBox() {
     boxY = Math.random() * (largeBox.clientHeight - boxHeight);
 
     // Random velocity direction
-    const speed = 4;
+    const speed = 3;
 
     const angle = Math.random() * 2 * Math.PI;
 

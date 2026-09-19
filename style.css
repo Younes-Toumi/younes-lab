@@ -48,14 +48,14 @@ body {
 }
 
 .name {
-    font-size: clamp(10px, 2.5vw, 28px);
+    font-size: clamp(10px, 2.5vw, 40px);
     font-weight: bold;
     letter-spacing: 3px;
 }
 
 .title {
     margin-top: 8px;
-    font-size: clamp(7px, 1.2vw, 16px);
+    font-size: clamp(7px, 1.2vw, 30px);
     letter-spacing: 1.5px;
     opacity: 0.7;
 }
@@ -74,12 +74,12 @@ body {
 }
 
 .controls {
-    width: 900px;
+    width: 100%;
     margin-top: 25px;
 
     display: flex;
     flex-direction: row;
-    gap: 15px;
+    gap: 50px;
     color: white;
     font-family: ubuntu;
 }
@@ -87,7 +87,9 @@ body {
 .controls label {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 30px;
+    font-size: 30px;
+
     font-family: ubuntu;
 
 }
@@ -108,7 +110,7 @@ body {
 
 
 .value-box {
-    width: 20px;
+    width: 40px;
     text-align: center;
     display: inline-block;
     font-family: ubuntu;
